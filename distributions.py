@@ -1,6 +1,8 @@
 import random
+from functools import reduce
 def dice(sides_i):
 	return {n: 1/sides_i for n in range(1,sides_i+1)}
+
 
 def roll(dice):
 	r = random.random()
@@ -18,3 +20,6 @@ def do_oper(funct, arg1_d, arg2_d):
 		for val2, prob2 in arg2_d.items():
 			distr[funct(val1,val2)]+=prob1*prob2
 	return distr
+
+def iter_oper(funct, args_d):
+	return reduce((lambda arg1_d, arg2_d: do_oper(funct, arg1_d,arg2_d)), args_d)
