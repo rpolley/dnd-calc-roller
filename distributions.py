@@ -37,6 +37,15 @@ class distr(dict):
 		else:
 			return bool_distr(lambda x, y: x<=y, self, other)
 
+def conditional_distr(cond, ontrue, onfalse):
+	result = {k:0 for k in list(ontrue)+list(onfalse)}
+	for val, prob in ontrue.items():
+		result[val]+=prob*cond[1]
+	for val, prob in onfalse.items():
+		result[val]+=prob*cond[0]
+	return distr(result)
+
+
 def bool_scalar(funct, dist, scal):
 	result = {0: 0, 1: 0}
 	for value, prob in dist.items():
