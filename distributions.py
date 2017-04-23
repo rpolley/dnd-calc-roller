@@ -13,7 +13,29 @@ class distr(dict):
 		else:
 			return bool_distr(lambda x, y: x>y, self, other)
 
+	def __lt__(self, other):
+		if(type(other)==int):
+			return bool_scalar(lambda x, y: x<y, self, other)
+		else:
+			return bool_distr(lambda x, y: x<y, self, other)
 
+	def __eq__(self, other):
+		if(type(other)==int):
+			return bool_scalar(lambda x, y: x==y, self, other)
+		else:
+			return bool_distr(lambda x, y: x==y, self, other)
+
+	def __ge__(self, other):
+		if(type(other)==int):
+			return bool_scalar(lambda x, y: x>=y, self, other)
+		else:
+			return bool_distr(lambda x, y: x>=y, self, other)
+
+	def __le__(self, other):
+		if(type(other)==int):
+			return bool_scalar(lambda x, y: x<=y, self, other)
+		else:
+			return bool_distr(lambda x, y: x<=y, self, other)
 
 def bool_scalar(funct, dist, scal):
 	result = {0: 0, 1: 0}
