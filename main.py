@@ -5,14 +5,17 @@ import fileinput
 __log__ = False
 
 def evaluate(cmd):
-	if(__log__): print(list(cmd))
+	if(__log__): print(cmd)
 	if type(cmd)==str:
 		return int(cmd)
-	elif len(list(cmd))==1:
+	elif len(cmd)==1:
 		return evaluate(cmd[0])
 	elif type(cmd)==int:
 		return cmd
-	elif len(list(cmd))==3:
+	elif len(cmd)==2:
+		if cmd[0]=="roll":				
+			return roll(evaluate(cmd[1]))
+	elif len(cmd)==3:
 		cmd[0] = evaluate(cmd[0])
 		cmd[2] = evaluate(cmd[2])
 		if cmd[1] == 'd':
@@ -25,6 +28,8 @@ def evaluate(cmd):
 			return typed_call(lambda n, m: n+m, cmd[0], cmd[2])
 		elif cmd[1] == "-":
 			return typed_call(lambda n, m: n-m, cmd[0], cmd[2])
+	else:
+		return cmd
 		
 
 def typed_call(funct, arg1, arg2):

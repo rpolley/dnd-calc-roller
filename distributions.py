@@ -37,6 +37,8 @@ def bool_distr(funct, dist1, dist2):
 
 def roll(dice):
 	r = random.random()
+	if type(dice)==list:
+		dice = sum_distr(dice)
 	dice = normalize(dice)
 	for value, prob in dice.items():
 		r-=prob
