@@ -2,40 +2,10 @@ import random
 from functools import reduce
 def dice(sides_i):
 	return distr({n: 1/sides_i for n in range(1,sides_i+1)})
-
 class distr(dict):
 	def __init__(self, d):
 		dict.__init__(self, d)
 
-	def __gt__(self, other):
-		if(type(other)==int):
-			return bool_scalar(lambda x, y: x>y, self, other)
-		else:
-			return bool_distr(lambda x, y: x>y, self, other)
-
-	def __lt__(self, other):
-		if(type(other)==int):
-			return bool_scalar(lambda x, y: x<y, self, other)
-		else:
-			return bool_distr(lambda x, y: x<y, self, other)
-
-	def __eq__(self, other):
-		if(type(other)==int):
-			return bool_scalar(lambda x, y: x==y, self, other)
-		else:
-			return bool_distr(lambda x, y: x==y, self, other)
-
-	def __ge__(self, other):
-		if(type(other)==int):
-			return bool_scalar(lambda x, y: x>=y, self, other)
-		else:
-			return bool_distr(lambda x, y: x>=y, self, other)
-
-	def __le__(self, other):
-		if(type(other)==int):
-			return bool_scalar(lambda x, y: x<=y, self, other)
-		else:
-			return bool_distr(lambda x, y: x<=y, self, other)
 
 def conditional_distr(cond, ontrue, onfalse):
 	result = {k:0 for k in list(ontrue)+list(onfalse)}
@@ -65,17 +35,19 @@ def bool_distr(funct, dist1, dist2):
 				result[0]+=prob1*prob2
 	return distr(result)
 
-
-
-
 def roll(dice):
 	r = random.random()
+	dice = normalize(dice)
 	for value, prob in dice.items():
 		r-=prob
 		if r<=0:
 			return value
-	else:
-		return roll(dice) #we fucked up because of floating point arithmatic somewhere
+
+"""make sure that the sum of probabilities is 1"""
+def normalize(dice):
+	prob_sum = sum([prob for value, prob in dice.items()])
+	return distr({value: prob/prob_sum for value, prob in dice.items()})
+
 
 def do_oper1(funct, arg_d):
 	return distr({funct(n): prob for n, prob in arg_d.items()})
@@ -101,3 +73,7 @@ def add_distr(dist1, dist2):
 
 def iter_add_distr(dist, scal):
 	return iter_oper(lambda x,y: x+y, [dist]*scal)
+
+def sum_distr(dlist):
+	return iter_oper(lambda x,y: x+y, dlist)
+
