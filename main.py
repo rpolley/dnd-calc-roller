@@ -7,7 +7,7 @@ import os
 import readline
 import sys
 
-__log__ = True
+__log__ = False
 
 
 def evaluate(cmd):
