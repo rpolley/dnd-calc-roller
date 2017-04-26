@@ -5,6 +5,7 @@ import code
 import atexit
 import os
 import readline
+import sys
 
 __log__ = False
 
@@ -94,6 +95,15 @@ class DicePrompt(code.InteractiveConsole):
 		code = parser.expr.parseString(source)
 		self.runcode(code)
 
+def runfile(name):
+	for line in fileinput.input(name):
+		code = parser.expr.parseString(line)
+		evaluate(code)
+
+runfile(".defaults")
+
+if len(sys.argv)>1:
+	runfile(sys.argv[1])
 
 prompt = DicePrompt()
 
