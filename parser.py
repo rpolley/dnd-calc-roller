@@ -2,7 +2,7 @@ from lib.pyparsing import *
 integer = Word(nums)
 variable = Word(alphanums+"_")
 value_expr = Forward()
-dice_expr = infixNotation(integer | value_expr, 
+dice_expr = infixNotation(integer | variable, 
 	[
 		("d", 1, opAssoc.RIGHT),
 		("d", 2, opAssoc.LEFT),

@@ -7,13 +7,12 @@ import os
 import readline
 import sys
 
-__log__ = False
+__log__ = True
 
 
 def evaluate(cmd):
 	if(__log__): 
 		print(cmd)
-		print(variables)
 	if type(cmd)==str and str.isnumeric(cmd):
 		return int(cmd)
 	elif type(cmd)==str and cmd in variables.keys():
