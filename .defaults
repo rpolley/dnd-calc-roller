@@ -1,9 +1,11 @@
+#enter your values for these
 STR = 0
 DEX = 0
 PROF = 2
+#finesse and thrown weapons can use either strength or dex
+#so swich either to STR if you'd like
 FINESSE = DEX
 THROWN = DEX
-TO_HIT = STR+PROF
 initiative = 1d20+DEX
 club = 1d4+STR
 dagger = 1d4+FINESSE

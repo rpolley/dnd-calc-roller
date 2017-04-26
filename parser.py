@@ -16,4 +16,5 @@ dice_expr << infixNotation(integer,
 	])
 value_expr << Or([arithmatic_expr,dice_expr,variable])
 variable_definition = variable + "=" + value_expr
-expr = value_expr ^ variable_definition
+comment = Suppress("#"+SkipTo(LineEnd()))
+expr = value_expr ^ variable_definition ^ comment
