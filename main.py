@@ -8,6 +8,7 @@ import readline
 import sys
 
 __log__ = False
+__show_tree__ = False
 
 
 def evaluate(cmd):
@@ -89,6 +90,7 @@ class DicePrompt(code.InteractiveConsole):
 		readline.set_history_length(1000)
 		readline.write_history_file(histfile)
 	def runcode(self, code):
+		if(__show_tree__): print(code.dump())
 		print(evaluate(code))
 	def runsource(self, source, filename='<input>', symbol='single'):
 		code = parser.expr.parseString(source)
