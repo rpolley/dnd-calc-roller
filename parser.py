@@ -1,6 +1,6 @@
 from lib.pyparsing import *
 integer = Word(nums)
-variable = Word(alphanums)
+variable = Word(alphanums+"_")
 value_expr = Forward()
 dice_expr = infixNotation(integer | value_expr, 
 	[
