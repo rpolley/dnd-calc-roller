@@ -9,5 +9,6 @@ dice_expr = infixNotation(integer | variable,
 		(oneOf("+ -"), 2, opAssoc.LEFT),
 		(Keyword("roll"), 1, opAssoc.RIGHT)
 	])
-variable_definition = variable + "=" + (dice_expr|variable)
+value_expr = dice_expr^variable
+variable_definition = variable + "=" + value_expr
 expr = dice_expr ^ variable_definition

@@ -1,6 +1,10 @@
 from distributions import *
 import parser
 import fileinput
+import code
+import atexit
+import os
+import readline
 
 __log__ = False
 
@@ -63,8 +67,35 @@ def typed_call(funct, arg1, arg2):
 		return do_oper2(funct, arg1, arg2)
 
 
+
 variables = {}
 
-for line in fileinput.input():
-	parsed_cmd = parser.expr.parseString(line)
-	print(evaluate(parsed_cmd))
+class DicePrompt(code.InteractiveConsole):
+	def __init__(self, locals=None, filename="<console>",
+		histfile=os.path.expanduser("~/.console-history")):
+		code.InteractiveConsole.__init__(self, locals, filename)
+		self.init_history(histfile)
+
+	def init_history(self, histfile):
+		readline.parse_and_bind("tab: complete")
+		if hasattr(readline, "read_history_file"):
+			try:
+				readline.read_history_file(histfile)
+			except FileNotFoundError:
+				pass
+			atexit.register(self.save_history, histfile)
+
+	def save_history(self, histfile):
+		readline.set_history_length(1000)
+		readline.write_history_file(histfile)
+	def runcode(self, code):
+		print(evaluate(code))
+	def runsource(self, source, filename='<input>', symbol='single'):
+		code = parser.expr.parseString(source)
+		self.runcode(code)
+
+
+prompt = DicePrompt()
+
+while True:
+	prompt.interact("dice>")
