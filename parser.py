@@ -1,7 +1,8 @@
 from lib.pyparsing import *
 integer = Word(nums)
-variable = Word(srange("[A-Z]")+nums)
-dice_expr = infixNotation(integer | variable, 
+variable = Word(alphanums)
+value_expr = Forward()
+dice_expr = infixNotation(integer | value_expr, 
 	[
 		("d", 1, opAssoc.RIGHT),
 		("d", 2, opAssoc.LEFT),
@@ -9,6 +10,6 @@ dice_expr = infixNotation(integer | variable,
 		(oneOf("+ -"), 2, opAssoc.LEFT),
 		(Keyword("roll"), 1, opAssoc.RIGHT)
 	])
-value_expr = dice_expr^variable
+value_expr = (dice_expr^variable)^("("+value_expr+")")
 variable_definition = variable + "=" + value_expr
-expr = dice_expr ^ variable_definition
+expr = value_expr ^ variable_definition

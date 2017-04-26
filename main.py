@@ -104,6 +104,8 @@ runfile(".defaults")
 
 if len(sys.argv)>1:
 	runfile(sys.argv[1])
+	sys.exit(0)
+
 
 prompt = DicePrompt()
 
