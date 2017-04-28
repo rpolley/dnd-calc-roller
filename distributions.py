@@ -2,6 +2,10 @@ import random
 from functools import reduce
 def dice(sides_i):
 	return distr({n: 1/sides_i for n in range(1,sides_i+1)})
+
+def unit(scalar):
+	return distr({scalar: 1})
+
 class distr(dict):
 	def __init__(self, d):
 		dict.__init__(self, d)
@@ -14,6 +18,7 @@ def conditional_distr(cond, ontrue, onfalse):
 	for val, prob in onfalse.items():
 		result[val]+=prob*cond[0]
 	return distr(result)
+
 
 
 def bool_scalar(funct, dist, scal):
@@ -50,6 +55,19 @@ def normalize(dice):
 	prob_sum = sum([prob for value, prob in dice.items()])
 	return distr({value: prob/prob_sum for value, prob in dice.items()})
 
+
+def matrix(arg1_d, arg2_d):
+	return {(value1,value2): prob1*prob2 for value1, prob1 in arg1_d.items() for value2, prob2 in arg2_d.items()}
+
+def do_oper(funct, *args_d):
+	args_d = list(args_d)
+	if len(args_d)==1:
+		return do_oper1(funct, args_d[0])
+	reduced = reduce(matrix, args_d)
+	dist = {funct(*vals): 0 for vals in reduced.keys()}
+	for vals, prob in reduced.items():
+		dist[funct(*vals)] += prob
+	return distr(dist)
 
 def do_oper1(funct, arg_d):
 	return distr({funct(n): prob for n, prob in arg_d.items()})

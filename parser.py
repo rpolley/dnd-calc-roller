@@ -7,6 +7,7 @@ arithmatic_expr = infixNotation(Or([integer,variable,dice_expr]),
 	[
 		(oneOf("* /"), 2, opAssoc.LEFT),
 		(oneOf("+ -"), 2, opAssoc.LEFT),
+		(oneOf("> >= == <= <"), 2, opAssoc.LEFT),
 		(Keyword("roll"), 1, opAssoc.RIGHT),
 	])
 dice_expr << infixNotation(integer,

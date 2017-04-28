@@ -36,7 +36,7 @@ def evaluate(cmd):
 		cmd[0] = evaluate(cmd[0])
 		cmd[2] = evaluate(cmd[2])
 		if cmd[1] == 'd':
-			return typed_call(lambda n, m: n*[dice(m)], cmd[0], cmd[2])
+			return cmd[0]*[dice(cmd[2])]
 		elif cmd[1] == "*":
 			return typed_call(lambda n, m: n*m, cmd[0], cmd[2])
 		elif cmd[1] == "/":
@@ -45,27 +45,32 @@ def evaluate(cmd):
 			return typed_call(lambda n, m: n+m, cmd[0], cmd[2])
 		elif cmd[1] == "-":
 			return typed_call(lambda n, m: n-m, cmd[0], cmd[2])
-		
+		elif cmd[1] == ">":
+			return typed_call(lambda n, m: n>m, cmd[0], cmd[2])
+		elif cmd[1] == ">=":
+			return typed_call(lambda n, m: n>=m, cmd[0], cmd[2])
+		elif cmd[1] == "==":
+			return typed_call(lambda n, m: n==m, cmd[0], cmd[2])
+		elif cmd[1] == "<=":
+			return typed_call(lambda n, m: n<=m, cmd[0], cmd[2])
+		elif cmd[1] == "<":
+			return typed_call(lambda n, m: n>m, cmd[0], cmd[2])
 	else:
 		return cmd
 		
 
-def typed_call(funct, arg1, arg2):
-	#first sum any lists
-	if type(arg1)==list:
-		arg1 = sum_distr(arg1)
-	if type(arg2)==list:
-		arg2 = sum_distr(arg2)
+def typed_call(funct, *args):
+	args = list(args)
+	#first convert everything into distributions
+	for i, arg in enumerate(args):
+		if type(arg)==list:
+			args[i] = sum_distr(arg)
+		elif arg==None:
+			args[i]=unit(0)
+		elif type(arg)!=distr:
+			args[i] = unit(arg)
 
-	#then guess the type and apply the correct function
-	if type(arg1)==int and type(arg2)==int:
-		return funct(arg1,arg2)
-	elif type(arg1)==distr and type(arg2)==int:
-		return do_oper1(lambda num: funct(num, arg2), arg1)
-	elif type(arg1)==int and type(arg2)==distr:
-		return do_oper1(lambda num: funct(num, arg2), arg1)
-	elif type(arg1)==distr and type(arg2)==distr:
-		return do_oper2(funct, arg1, arg2)
+	return do_oper(funct, *args)
 
 
 
