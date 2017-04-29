@@ -3,6 +3,7 @@ from functools import reduce
 def dice(sides_i):
 	return distr({n: 1/sides_i for n in range(1,sides_i+1)})
 
+"""convert a value into a dice that always rolls that value"""
 def unit(scalar):
 	return distr({scalar: 1})
 
@@ -10,40 +11,31 @@ class distr(dict):
 	def __init__(self, d):
 		dict.__init__(self, d)
 
+def to_distr(item):
+	if type(item)==list:
+		return sum_distr(item)
+	elif item==None:
+		return unit(0)
+	elif type(item)!=distr:
+		return unit(item)
+	else:
+		return item
 
 def conditional_distr(cond, ontrue, onfalse):
+	cond = to_distr(cond)
+	ontrue = to_distr(ontrue)
+	onfalse = to_distr(onfalse)
 	result = {k:0 for k in list(ontrue)+list(onfalse)}
 	for val, prob in ontrue.items():
-		result[val]+=prob*cond[1]
+		result[val]+=prob*cond[True]
 	for val, prob in onfalse.items():
-		result[val]+=prob*cond[0]
+		result[val]+=prob*cond[False]
 	return distr(result)
 
-
-
-def bool_scalar(funct, dist, scal):
-	result = {0: 0, 1: 0}
-	for value, prob in dist.items():
-		if(funct(value,scal)):
-			result[1]+=prob
-		else:
-			result[0]+=prob
-	return distr(result)
-
-def bool_distr(funct, dist1, dist2):
-	result = {0: 0, 1: 0}
-	for value1, prob1 in dist1.items():
-		for value2, prob2 in dist2.items():
-			if(funct(value1, value2)):
-				result[1]+=prob1*prob2
-			else:
-				result[0]+=prob1*prob2
-	return distr(result)
 
 def roll(dice):
 	r = random.random()
-	if type(dice)==list:
-		dice = sum_distr(dice)
+	dice = to_distr(dice)
 	dice = normalize(dice)
 	for value, prob in dice.items():
 		r-=prob

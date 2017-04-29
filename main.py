@@ -22,6 +22,8 @@ def evaluate(cmd):
 		return cmd
 	elif type(cmd)==int:
 		return cmd
+	elif type(cmd)==distr:
+		return cmd
 	elif len(cmd)==1:
 		return evaluate(cmd[0])
 	elif len(cmd)==2:
@@ -55,6 +57,14 @@ def evaluate(cmd):
 			return typed_call(lambda n, m: n<=m, cmd[0], cmd[2])
 		elif cmd[1] == "<":
 			return typed_call(lambda n, m: n>m, cmd[0], cmd[2])
+	elif len(cmd)>=4 and cmd[0]=="if":
+		cmd[1] = evaluate(cmd[1])
+		cmd[3] = evaluate(cmd[3])
+		if cmd[2]=="then" and len(cmd)==4:
+			return conditional_distr(cmd[1], cmd[3], 0)
+		elif len(cmd)==6 and cmd[4]=="else":
+			cmd[5] = evaluate(cmd[5])
+			return conditional_distr(cmd[1], cmd[3], cmd[5])
 	else:
 		return cmd
 		
@@ -116,4 +126,4 @@ if len(sys.argv)>1:
 prompt = DicePrompt()
 
 while True:
-	prompt.interact("dice>")
+	prompt.interact("D&D dice prompt")
