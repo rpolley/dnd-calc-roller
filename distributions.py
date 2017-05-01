@@ -25,14 +25,14 @@ def unit(scalar):
 	return distr({scalar: 1})
 
 class distr(dict):
-	uid = 0
+	uid = 1
 	def __init__(self, d):
-		self.uid = distr.uid
+		self.uid = distr.uid<<16+random.randint(0,1<<15)
 		distr.uid+=1
 		dict.__init__(self, d)
 
 	def __hash__(self):
-		return self.uid
+		return hash(self.uid)
 
 def to_distr(item):
 	if type(item)==list or type(item)==tuple:
