@@ -1,18 +1,41 @@
 import random
 from functools import reduce
+
+def memoize(f):
+    """ Memoization decorator for functions taking one or more arguments. """
+    class memodict(dict):
+        def __init__(self, f):
+            self.f = f
+        def __call__(self, *args):
+
+            return self[args]
+        def __missing__(self, key):
+            ret = self[key] = self.f(*key)
+            return ret
+    return memodict(f)
+
+@memoize
 def dice(sides_i):
 	return distr({n: 1/sides_i for n in range(1,sides_i+1)})
 
+
 """convert a value into a dice that always rolls that value"""
+@memoize
 def unit(scalar):
 	return distr({scalar: 1})
 
 class distr(dict):
+	uid = 0
 	def __init__(self, d):
+		self.uid = distr.uid
+		distr.uid+=1
 		dict.__init__(self, d)
 
+	def __hash__(self):
+		return self.uid
+
 def to_distr(item):
-	if type(item)==list:
+	if type(item)==list or type(item)==tuple:
 		return sum_distr(item)
 	elif item==None:
 		return unit(0)
@@ -43,16 +66,19 @@ def roll(dice):
 			return value
 
 """make sure that the sum of probabilities is 1"""
+@memoize
 def normalize(dice):
 	prob_sum = sum([prob for value, prob in dice.items()])
 	return distr({value: prob/prob_sum for value, prob in dice.items()})
 
 
+@memoize
 def matrix(arg1_d, arg2_d):
 	return {(value1,value2): prob1*prob2 for value1, prob1 in arg1_d.items() for value2, prob2 in arg2_d.items()}
 
 def do_oper(funct, *args_d):
-	args_d = list(args_d)
+	args_d = list(to_distr(arg) for arg in args_d)
+
 	if len(args_d)==1:
 		return do_oper1(funct, args_d[0])
 	reduced = reduce(matrix, args_d)
@@ -87,5 +113,7 @@ def iter_add_distr(dist, scal):
 	return iter_oper(lambda x,y: x+y, [dist]*scal)
 
 def sum_distr(dlist):
+	if len(dlist)==1:
+		return dlist[0]
 	return iter_oper(lambda x,y: x+y, dlist)
 

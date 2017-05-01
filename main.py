@@ -12,6 +12,8 @@ __show_tree__ = False
 
 
 def evaluate(cmd):
+	if type(cmd)==tuple:
+		cmd = list(cmd)
 	if(__log__): 
 		print(cmd)
 	if type(cmd)==str and str.isnumeric(cmd):
@@ -31,14 +33,14 @@ def evaluate(cmd):
 		if cmd[0]=="roll":				
 			return roll(cmd[1])
 		elif cmd[0]=="d":
-			return typed_call(lambda n, m: n*[dice(m)], 1, cmd[1])
+			return typed_call(lambda n, m: n*(dice(m),), 1, cmd[1])
 	elif len(cmd)==3:
 		if cmd[1] == "=":
 			variables[cmd[0]]=evaluate(cmd[2])
 		cmd[0] = evaluate(cmd[0])
 		cmd[2] = evaluate(cmd[2])
 		if cmd[1] == 'd':
-			return cmd[0]*[dice(cmd[2])]
+			return cmd[0]*(dice(cmd[2]),)
 		elif cmd[1] == "*":
 			return typed_call(lambda n, m: n*m, cmd[0], cmd[2])
 		elif cmd[1] == "/":
@@ -70,15 +72,7 @@ def evaluate(cmd):
 		
 
 def typed_call(funct, *args):
-	args = list(args)
-	#first convert everything into distributions
-	for i, arg in enumerate(args):
-		if type(arg)==list:
-			args[i] = sum_distr(arg)
-		elif arg==None:
-			args[i]=unit(0)
-		elif type(arg)!=distr:
-			args[i] = unit(arg)
+	args = [to_distr(arg) for arg in args]
 
 	return do_oper(funct, *args)
 
