@@ -7,15 +7,24 @@ import os
 import readline
 import sys
 
-__log__ = False
+__log__ = True
 __show_tree__ = False
+
+eval_cache = {}
+
+def cache(cmd, result):
+	tcmd = tuple(list(cmd))
+	if not tcmd in eval_cache.keys():
+		eval_cache[tcmd] = result
+	return result
 
 
 def evaluate(cmd):
-	if type(cmd)==tuple:
-		cmd = list(cmd)
 	if(__log__): 
 		print(cmd)
+	if type(cmd)==tuple:
+		cmd = list(cmd)
+	
 	if type(cmd)==str and str.isnumeric(cmd):
 		return int(cmd)
 	elif type(cmd)==str and cmd in variables.keys():
@@ -26,6 +35,10 @@ def evaluate(cmd):
 		return cmd
 	elif type(cmd)==distr:
 		return cmd
+	elif tuple(list(cmd)) in eval_cache.keys():
+		if(__log__):
+			print("cache hit")
+		return eval_cache[tuple(list(cmd))]
 	elif len(cmd)==1:
 		return evaluate(cmd[0])
 	elif len(cmd)==2:
@@ -42,26 +55,26 @@ def evaluate(cmd):
 		if cmd[1] == 'd':
 			return cmd[0]*(dice(cmd[2]),)
 		elif cmd[1] == "*":
-			return typed_call(lambda n, m: n*m, cmd[0], cmd[2])
+			return cache(cmd,typed_call(lambda n, m: n*m, cmd[0], cmd[2]))
 		elif cmd[1] == "/":
-			return typed_call(lambda n, m: n/m, cmd[0], cmd[2])
+			return cache(cmd,typed_call(lambda n, m: n/m, cmd[0], cmd[2]))
 		elif cmd[1] == "+":
-			return typed_call(lambda n, m: n+m, cmd[0], cmd[2])
+			return cache(cmd,typed_call(lambda n, m: n+m, cmd[0], cmd[2]))
 		elif cmd[1] == "-":
-			return typed_call(lambda n, m: n-m, cmd[0], cmd[2])
+			return cache(cmd,typed_call(lambda n, m: n-m, cmd[0], cmd[2]))
 		elif cmd[1] == ">":
-			return typed_call(lambda n, m: n>m, cmd[0], cmd[2])
+			return cache(cmd,typed_call(lambda n, m: n>m, cmd[0], cmd[2]))
 		elif cmd[1] == ">=":
-			return typed_call(lambda n, m: n>=m, cmd[0], cmd[2])
+			return cache(cmd,typed_call(lambda n, m: n>=m, cmd[0], cmd[2]))
 		elif cmd[1] == "==":
-			return typed_call(lambda n, m: n==m, cmd[0], cmd[2])
+			return cache(cmd,typed_call(lambda n, m: n==m, cmd[0], cmd[2]))
 		elif cmd[1] == "<=":
-			return typed_call(lambda n, m: n<=m, cmd[0], cmd[2])
+			return cache(cmd,typed_call(lambda n, m: n<=m, cmd[0], cmd[2]))
 		elif cmd[1] == "<":
-			return typed_call(lambda n, m: n>m, cmd[0], cmd[2])
+			return cache(cmd,typed_call(lambda n, m: n>m, cmd[0], cmd[2]))
 	elif len(cmd)>=4 and cmd[0]=="if":
-		cmd[1] = evaluate(cmd[1])
-		cmd[3] = evaluate(cmd[3])
+		cmd[1] = cache(cmd,evaluate(cmd[1]))
+		cmd[3] = cache(cmd,evaluate(cmd[3]))
 		if cmd[2]=="then" and len(cmd)==4:
 			return conditional_distr(cmd[1], cmd[3], 0)
 		elif len(cmd)==6 and cmd[4]=="else":

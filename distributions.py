@@ -44,8 +44,19 @@ def to_distr(item):
 	else:
 		return item
 
+@memoize
+def enforce_boolean(bool_dist):
+	if not True in bool_dist.keys() or not False in bool_dist.keys():
+		if(True in bool_dist.keys()):
+			return distr({True: bool_dist[True], False: 1-bool_dist[True]})
+		elif(False in bool_dist.keys()):
+			return distr({False: bool_dist[False], True: 1-bool_dist[False]})
+	elif True in bool_dist.keys() and False in bool_dist.keys():
+		return bool_dist
+	return enforce_boolean(unit(True))
+
 def conditional_distr(cond, ontrue, onfalse):
-	cond = to_distr(cond)
+	cond = enforce_boolean(to_distr(cond))
 	ontrue = to_distr(ontrue)
 	onfalse = to_distr(onfalse)
 	result = {k:0 for k in list(ontrue)+list(onfalse)}
