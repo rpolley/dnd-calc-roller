@@ -65,6 +65,13 @@ def roll(dice):
 		if r<=0:
 			return value
 
+def average(dice):
+	dice = normalize(dice)
+	weighted_sum = 0
+	for value, prob in dice.items():
+		weighted_sum+=value*prob
+	return weighted_sum
+
 """make sure that the sum of probabilities is 1"""
 @memoize
 def normalize(dice):
