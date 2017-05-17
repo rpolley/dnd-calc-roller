@@ -99,6 +99,8 @@ def do_oper(funct, *args_d):
 
 	if len(args_d)==1:
 		return do_oper1(funct, args_d[0])
+	if len(args_d)==2:
+		return do_oper2(funct,args_d[0],args_d[1])
 	reduced = reduce(matrix, args_d)
 	dist = {funct(*vals): 0 for vals in reduced.keys()}
 	for vals, prob in reduced.items():

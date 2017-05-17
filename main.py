@@ -123,14 +123,15 @@ def runfile(name):
 		code = parser.expr.parseString(line)
 		evaluate(code)
 
-runfile(".defaults")
+if __name__ == "__main__":
+	runfile(".defaults")
 
-if len(sys.argv)>1:
-	runfile(sys.argv[1])
-	sys.exit(0)
+	if len(sys.argv)>1:
+		runfile(sys.argv[1])
+		sys.exit(0)
 
 
-prompt = DicePrompt()
+	prompt = DicePrompt()
 
-while True:
-	prompt.interact("D&D dice prompt")
+	while True:
+		prompt.interact("D&D dice prompt")
