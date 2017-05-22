@@ -51,6 +51,16 @@ class Combatant():
 					self.update_results()
 		return Fight(self,other)
 
+class Feat(object):
+	"""Something that is conditionally applied during combat
+		condition: a function that determines whether the feature applies
+		effect: a function that applies the result to the slice, returning a distribution
+	"""
+	def __init__(self, cond, effect):
+		self.cond = cond
+		self.effect = effect
+		
+
 me = Combatant(17,5,19,do_oper(lambda x,y: x+y,dice(8),3),10)
 lvl1 = Combatant(12,5,18,do_oper(lambda x,y: x+y,dice(8),3),12)
 f = me.initialize_fight(lvl1)
