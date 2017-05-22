@@ -34,6 +34,9 @@ class distr(dict):
 	def __hash__(self):
 		return hash(self.uid)
 
+	def __missing__(self, key):
+		return 0
+
 def to_distr(item):
 	if type(item)==list or type(item)==tuple:
 		return sum_distr(item)
@@ -65,6 +68,23 @@ def conditional_distr(cond, ontrue, onfalse):
 	for val, prob in onfalse.items():
 		result[val]+=prob*cond[False]
 	return distr(result)
+
+def do_cond_oper(dist, cond, oper):
+	result = []
+	for value, prob in dist.items():
+		if cond(value):
+			result+=oper(dist({value: prob}))
+		else:
+			result+=dist({value: prob})
+	return fold(result)
+
+def fold(distrl):
+	result = {}
+	for dist in distrl:
+		for value,prob in dist.items():
+			dist[value]+=prob
+
+
 
 
 def roll(dice):
@@ -129,4 +149,3 @@ def sum_distr(dlist):
 	if len(dlist)==1:
 		return dlist[0]
 	return iter_oper(lambda x,y: x+y, dlist)
-
