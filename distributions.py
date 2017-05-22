@@ -120,17 +120,10 @@ def do_oper2(funct, arg1_d, arg2_d):
 def iter_oper(funct, args_d):
 	return reduce((lambda arg1_d, arg2_d: do_oper2(funct, arg1_d,arg2_d)), args_d)
 
-def scalar_add(dist, scal):
-	return do_oper1(lambda x: x+scal, dist)
-
-def scalar_mult(dist, scal):
-	return do_oper1(lambda x: x*scal, dist)
-
 def add_distr(dist1, dist2):
 	return do_oper2(lambda x, y: x+y, dist1, dist2)
 
-def iter_add_distr(dist, scal):
-	return iter_oper(lambda x,y: x+y, [dist]*scal)
+
 
 def sum_distr(dlist):
 	if len(dlist)==1:
