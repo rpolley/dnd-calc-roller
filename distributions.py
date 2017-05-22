@@ -62,7 +62,6 @@ def conditional_distr(cond, ontrue, onfalse):
 	cond = enforce_boolean(to_distr(cond))
 	ontrue = to_distr(ontrue)
 	onfalse = to_distr(onfalse)
-	result = {k:0 for k in list(ontrue)+list(onfalse)}
 	for val, prob in ontrue.items():
 		result[val]+=prob*cond[True]
 	for val, prob in onfalse.items():
@@ -83,9 +82,6 @@ def fold(distrl):
 	for dist in distrl:
 		for value,prob in dist.items():
 			dist[value]+=prob
-
-
-
 
 def roll(dice):
 	r = random.random()
@@ -131,7 +127,6 @@ def do_oper1(funct, arg_d):
 	return distr({funct(n): prob for n, prob in arg_d.items()})
 
 def do_oper2(funct, arg1_d, arg2_d):
-	dist = {funct(val1, val2): 0 for val1 in arg1_d.keys() for val2 in arg2_d.keys()}
 	for val1, prob1 in arg1_d.items():
 		for val2, prob2 in arg2_d.items():
 			dist[funct(val1,val2)]+=prob1*prob2
