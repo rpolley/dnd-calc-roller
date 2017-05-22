@@ -35,6 +35,7 @@ class distr(dict):
 		return hash(self.uid)
 
 	def __missing__(self, key):
+		self[key]=0
 		return 0
 
 def to_distr(item):
@@ -62,11 +63,12 @@ def conditional_distr(cond, ontrue, onfalse):
 	cond = enforce_boolean(to_distr(cond))
 	ontrue = to_distr(ontrue)
 	onfalse = to_distr(onfalse)
+	result = distr({})
 	for val, prob in ontrue.items():
 		result[val]+=prob*cond[True]
 	for val, prob in onfalse.items():
 		result[val]+=prob*cond[False]
-	return distr(result)
+	return result
 
 def do_cond_oper(dist, cond, oper):
 	result = []
@@ -127,10 +129,11 @@ def do_oper1(funct, arg_d):
 	return distr({funct(n): prob for n, prob in arg_d.items()})
 
 def do_oper2(funct, arg1_d, arg2_d):
+	dist = distr({})
 	for val1, prob1 in arg1_d.items():
 		for val2, prob2 in arg2_d.items():
 			dist[funct(val1,val2)]+=prob1*prob2
-	return distr(dist)
+	return dist
 
 def iter_oper(funct, args_d):
 	return reduce((lambda arg1_d, arg2_d: do_oper2(funct, arg1_d,arg2_d)), args_d)
