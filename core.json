@@ -1,0 +1,329 @@
+{
+	"class": {
+		"class": {
+			"type": "template",
+			"members": {
+				"base_hp": {"datatype": "int", "optional":false},
+				"caster": {"datatype": {"enum":["non","half","full","warlock"]}},
+				"features": {"datatype": {"array":{"array": "effect"}}}
+			}
+		}
+	},
+	"stats": {"type":{"struct":["strength","dexterity","constitution","intelligence","wisdom","charisma"]}},
+	"weapons": {
+		"weapon": {
+			"type": "template",
+			"parent": "root.items.item",
+			"members": {
+				"bonus": {"datatype": "int", "optional":true, "default":0},
+				"damage": {"datatype": "string", "optional":false},
+				"damagetype": {"enum":["bludgeoning","piercing","slashing"]},
+				"traits": {"datatype": {"array": "string"}, "optional":true, "default":"null"},
+				"weaponclass": {"datatype": {"enum": ["martial","simple"]}}
+			}
+		},
+		"club": {
+			"damage": "1d4",
+			"damagetype": "bludgeoning",
+			"traits": ["light"]
+			"weight": 2,
+			"cost": 10,
+			"weaponclass": "simple"
+		},
+		"dagger": {
+			"damage": "1d4",
+			"damagetype": "piercing",
+			"traits": ["finesse","light","thrown(20,60)"],
+			"weight": 1,
+			"cost": 200,
+			"weaponclass": "simple"
+		},
+		"greatclub": {
+			"damage": "1d8",
+			"damagetype": "bludgeoning",
+			"traits": ["two-handed"],
+			"weight": 1,
+			"cost": 20,
+			"weaponclass": "simple"
+		},
+		"handaxe": {
+			"damage": "1d6",
+			"damagetype": "slashing",
+			"traits": ["light","thrown(20,60)"],
+			"weight": 2,
+			"cost": 500
+		},
+		"javelin": {
+			"damage": "1d6",
+			"damagetype": "piercing",
+			"traits": ["thrown(30,120)"],
+			"weight": 2,
+			"cost": 50,
+			"weaponclass": "simple"
+		},
+		"light hammer": {
+			"damage": "1d4",
+			"damagetype": "bludgeoning",
+			"traits": ["light","thrown(20,60)"],
+			"weight": 2,
+			"cost": 200,
+			"weaponclass": "simple"
+		},
+		"mace": {
+			"damage": "1d6",
+			"damagetype": "bludgeoning",
+			"weight": 4,
+			"cost": 500,
+			"weaponclass": "simple"
+		},
+		"quarterstaff": {
+			"damage": "1d6",
+			"damagetype": "bludgeoning",
+			"traits": ["versatile(1d8)"],
+			"weight": 4,
+			"cost": 20,
+			"weaponclass": "simple"
+		},
+		"sickle": {
+			"damage": "1d4",
+			"damagetype": "slashing",
+			"traits": ["light"],
+			"weight": 2,
+			"cost": 100,
+			"weaponclass": "simple"
+		},
+		"spear": {
+			"damage": "1d6",
+			"damagetype": "piercing",
+			"traits": ["thrown(20,60)","versatile(1d8)"],
+			"weight": 3,
+			"cost": 100,
+			"weaponclass": "simple"
+		},
+		"light crossbow": {
+			"damage": "1d8",
+			"damagetype": "piercing",
+			"traits": ["ammunition(80,320)","two-handed"],
+			"weight": 5,
+			"cost": 2500,
+			"weaponclass": "simple"
+		},
+		"dart": {
+			"damage": "1d4",
+			"damagetype": "piercing",
+			"traits": ["finesse","thrown(20,60)"],
+			"weight": .25,
+			"cost": 5,
+			"weaponclass": "simple"
+		},
+		"shortbow": {
+			"damage": "1d6",
+			"damagetype": "piercing",
+			"traits": ["ammunition(80,320)","two-handed"],
+			"weight": 2,
+			"cost": 2500,
+			"weaponclass": "simple"
+		},
+		"sling": {
+			"damage": "1d4",
+			"damagetype": "bludgeoning",
+			"traits": ["ammunition(30,120)"],
+			"weight": 0,
+			"cost": 10,
+			"weaponclass": "simple"
+		},
+		"battleaxe": {
+			"damage": "1d8",
+			"damagetype": "slashing",
+			"traits": ["versatile(1d10)"],
+			"weight": 4,
+			"cost": 1000,
+			"weaponclass": "martial"
+		},
+		"flail": {
+			"damage": "1d8",
+			"damagetype": "bludgeoning",
+			"weight": 2,
+			"cost": 1000,
+			"weaponclass": "martial"
+		},
+		"glaive": {
+			"damage": "1d10",
+			"damagetype": "slashing",
+			"traits": ["heavy","reach","two-handed"],
+			"weight": 6,
+			"cost": 2000,
+			"weaponclass": "martial"
+		},
+		"greataxe": {
+			"damage": "1d12",
+			"damagetype": "slashing",
+			"traits": ["heavy","two-handed"],
+			"weight": 7,
+			"cost": 3000,
+			"weaponclass": "martial"
+		},
+		"greatsword": {
+			"damage": "2d6",
+			"damagetype": "slashing",
+			"traits": ["heavy","two-handed"],
+			"weight": 6,
+			"cost": 5000,
+			"weaponclass":"martial"
+		}
+		"halberd": {
+			"damage": "1d10",
+			"damagetype": "slashing",
+			"traits": ["heavy","two-handed","reach"],
+			"weight": 6,
+			"cost": 2000,
+			"weaponclass": "martial"
+		},
+		"lance": {
+			"damage": "1d12",
+			"damagetype", "slashing",
+			"traits": ["heavy"],
+			"effects": [{"ref":"effects.lance"}],
+			"weight": 6,
+			"cost": 1000,
+			"weaponclass": "martial"			
+		},
+		"longsword": {
+			"damage": "1d8",
+			"damagetype": "slashing",
+			"traits": ["versatile(1d10)"],
+			"weight": 3,
+			"cost": 1500,
+			"weaponclass": "martial"
+		},
+		"maul": {
+			"damage": "2d6",
+			"damagetype": "bludgeoning",
+			"traits": ["heavy","two-handed"],
+			"weight": 10,
+			"cost": 1000,
+			"weaponclass": "martial"
+		},
+		"morningstar": {
+			"damage": "1d8",
+			"damagetype": "piercing",
+			"weight": 4,
+			"cost": 1500,
+			"weaponclass": "martial"
+		},
+		"pike": {
+			"damage": "1d10",
+			"damagetype": "piercing",
+			"traits": ["heavy","reach","two-handed"],
+			"weight": 18,
+			"cost": 500,
+			"weaponclass": "martial"
+		},
+		"rapier": {
+			"damage": "1d8",
+			"damagetype": "piercing",
+			"traits": ["finesse"],
+			"weight": 2,
+			"cost": 2500,
+			"weaponclass": "martial"
+		},
+		"scimitar": {
+			"damage": "1d6",
+			"damagetype": "slashing",
+			"traits": ["finesse","light"],
+			"weight": 3,
+			"cost": 2500,
+			"weaponclass": "martial"
+		},
+		"shortsword": {
+			"damage": "1d6",
+			"damagetype": "piercing",
+			"traits": ["finesse","light"],
+			"weight": 2,
+			"cost": 1000,
+			"weaponclass": "martial"
+		},
+		"trident": {
+			"damage": "1d6",
+			"damagetype": "piercing",
+			"traits": ["thrown(20,60)","versatile"],
+			"weight": 4,
+			"cost": 500,
+			"weaponclass": "martial"
+		},
+		"war pick": {
+			"damage": "1d8",
+			"damagetype": "piercing",
+			"weight": 2,
+			"cost": 500,
+			"weaponclass": "martial"
+		},
+		"warhammer": {
+			"damage": "1d8",
+			"damagetype": "bludgeoning",
+			"traits": ["versatile(1d10)"],
+			"weight": 2,
+			"cost": 1500,
+			"weaponclass": "martial"
+		},
+		"whip": {
+			"damage": "1d4",
+			"damagetype": "slashing",
+			"traits": ["finesse","reach"],
+			"weight": 3,
+			"cost": 200,
+			"weaponclass": "martial"
+		},
+		"blowgun": {
+			"damage": "1",
+			"damagetype": "piercing",
+			"traits": ["ammunition(25,100)","loading"],
+			"weight": 1,
+			"cost": 1000,
+			"weaponclass": "martial"
+		},
+		"hand crossbow": {
+			"damage": "1d6",
+			"damagetype": "piercing",
+			"traits": ["ammunition(30,120)","light","loading"],
+			"weight": 3,
+			"cost": 7500,
+			"weaponclass": "martial"
+		},
+		"heavy crossbow": {
+			"damage": "1d10",
+			"damagetype": "piercing",
+			"traits": ["ammunition(100,400)","heavy","loading","two-handed"],
+			"weight": 18,
+			"cost": 5000,
+			"weaponclass": "martial"
+		},
+		"longbow": {
+			"damage": "1d8",
+			"damagetype": "piercing",
+			"traits": ["ammunition(150,600)","heavy","two-handed"],
+			"weight": 2,
+			"cost": 5000,
+			"weaponclass": "martial"
+		},
+		"net": {
+			"damage": "0",
+			"damagetype": "null",
+			"traits": ["thrown(5,15)"],
+			"effects": [{"ref","effects.net"}],
+			"weight": 3,
+			"cost": 100,
+			"weaponclass": "martial"
+		}
+	}
+	"items": {
+		"item": {
+			"type": "template",
+			"members": [
+				"cost": {"datatype": "int", "optional":false},
+				"weight": {"datatype": "double", "optional":false},
+				"effects": {"datatype": {"array":"effect"}, "optional":true, "default":"null"},
+			]
+		}
+	}
+}
